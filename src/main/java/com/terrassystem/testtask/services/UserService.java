@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by Павло on 19.06.2017.
  */
-@Service
 public interface UserService {
     void addUser(User user);
     void updateUser(User user);
@@ -19,4 +18,6 @@ public interface UserService {
 
     void addRole(User user, Role role);
     void removeRole(User user, Role role);
+
+    User getByUsernameAndPassword(String username, String password);
 }

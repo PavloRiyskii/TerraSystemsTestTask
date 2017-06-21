@@ -8,6 +8,7 @@ import com.terrassystem.testtask.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
-    // User requests
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> getUser(@PathVariable("id") long id) {
         User user = this.userService.getUserById(id);
@@ -69,6 +70,7 @@ public class UserController {
 
     //TODO - чи потрібні оброблювачі для запитів доступу до ролей користувача
 
+    @PreFilter(value = "")
     @RequestMapping(value = "/{id}/roles", method = RequestMethod.GET)
     public ResponseEntity<String> getUserRoles(@PathVariable("id") Long id) {
         Set<Role> roles = this.userService.getUserById(id).getRoles();

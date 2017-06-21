@@ -19,13 +19,13 @@ public class User implements Serializable{
     private String name;
 
     @Column(name ="password", nullable = false)
-    private String passwWord;
+    private String password;
     // TODO - prevent parsing to json password
 
     @Column(name = "isActive")
     private boolean isActive;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public Long getId() {
@@ -44,12 +44,12 @@ public class User implements Serializable{
         this.name = name;
     }
 
-    public String getPasswWord() {
-        return passwWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswWord(String passwWrd) {
-        this.passwWord = passwWrd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isActive() {
@@ -78,7 +78,7 @@ public class User implements Serializable{
         }
 
         User user = (User) object;
-        if(user.getId() == this.id && user.getName().equals(this.name) && user.getPasswWord().equals(this.passwWord) &&
+        if(user.getId() == this.id && user.getName().equals(this.name) && user.getPassword().equals(this.getPassword()) &&
                 user.getRoles().hashCode() == this.roles.hashCode()) {
             return true;
         } else {
@@ -88,7 +88,7 @@ public class User implements Serializable{
 
     @Override
     public int hashCode() {
-        return this.id.hashCode() + this.name.hashCode() + this.passwWord.hashCode() + this.roles.hashCode();
+        return this.id.hashCode() + this.name.hashCode() + this.getPassword().hashCode() + this.roles.hashCode();
     }
 
     @Override

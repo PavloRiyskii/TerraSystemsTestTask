@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Created by Павло on 19.06.2017.
  */
+@Repository
 public class RoleDaoImpl implements RoleDao {
 
     @Autowired
