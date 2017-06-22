@@ -21,7 +21,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     //TODO - chenge expiration time to new per request if token valid
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         String authToken = httpServletRequest.getHeader("Authorization");
-        //httpServletResponse.addHeader("valid", "invalid");
         if(authToken != null && authToken.startsWith("Basic ") && TokenUtil.validateJWT(authToken.substring("Basic ".length(), authToken.length()))){
             authToken = authToken.substring("Basic ".length(), authToken.length());
             String username = TokenUtil.getUserNameFromToken(authToken);

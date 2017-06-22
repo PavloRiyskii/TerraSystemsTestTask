@@ -22,6 +22,7 @@ public class ApplicationInit implements WebApplicationInitializer {
 
     private void registerDispatcherServlet(ServletContext servletContext) {
         WebApplicationContext applicationContext = this.getContext( Config.class, SecurityConfig.class, DBConfig.class);
+        //servletContext.addFilter("AuthenticationFilter", new AuthenticationFilter());
         DispatcherServlet dispatcherServlet= new DispatcherServlet(applicationContext);
         ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", dispatcherServlet);
         registration.setLoadOnStartup(1);

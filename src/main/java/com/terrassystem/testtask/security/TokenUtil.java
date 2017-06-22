@@ -2,12 +2,7 @@ package com.terrassystem.testtask.security;
 
 
 import io.jsonwebtoken.*;
-import org.springframework.security.crypto.codec.Base64;
-
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
-import java.security.Key;
 import java.util.Date;
 
 /**

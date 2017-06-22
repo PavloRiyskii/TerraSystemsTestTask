@@ -2,7 +2,6 @@ package com.terrassystem.testtask.services;
 
 import com.terrassystem.testtask.entity.Role;
 import com.terrassystem.testtask.entity.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
