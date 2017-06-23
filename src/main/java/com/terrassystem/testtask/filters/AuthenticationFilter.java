@@ -44,7 +44,7 @@ public class AuthenticationFilter extends GenericFilterBean {
             String username = TokenUtil.getUserNameFromToken(authToken);
             String password = TokenUtil.getPasswordFromToken(authToken);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
