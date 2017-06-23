@@ -3,6 +3,7 @@ package com.terrassystem.testtask.filters;
 import com.terrassystem.testtask.entity.User;
 import com.terrassystem.testtask.security.TokenUtil;
 import com.terrassystem.testtask.services.UserService;
+import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

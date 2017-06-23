@@ -1,6 +1,8 @@
 package com.terrassystem.testtask.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -15,7 +17,8 @@ public class Role implements Serializable {
     @Column(name = "role_id")
     private Long id;
 
-    @Column(name = "name")
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     public Long getId() {

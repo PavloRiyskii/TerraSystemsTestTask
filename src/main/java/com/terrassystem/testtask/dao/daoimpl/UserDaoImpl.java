@@ -2,9 +2,12 @@ package com.terrassystem.testtask.dao.daoimpl;
 
 import com.terrassystem.testtask.dao.UserDao;
 import com.terrassystem.testtask.entity.User;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,7 +42,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     public User getUserByUsernameAndPassword(String username, String password) {
-        return (User) this.sessionFactory.getCurrentSession().createQuery("FROM User WHERE name = " + username +
-                " and password = " + password).list().get(0);
+        Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(User.class);
+        criteria.add(Restrictions.eq("name", username));
+        criteria.add(Restrictions.eq("password", password));
+        List<User> result = criteria.list();
+        return result.isEmpty() ?  null : result.get(0);
     }
 }

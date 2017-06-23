@@ -1,7 +1,10 @@
 package com.terrassystem.testtask.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -61,6 +64,9 @@ public class User implements Serializable{
     }
 
     public Set<Role> getRoles() {
+        if(this.roles == null) {
+            return new HashSet<Role>();
+        }
         return roles;
     }
 

@@ -2,6 +2,8 @@ package com.terrassystem.testtask.security;
 
 
 import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -67,6 +69,5 @@ public class TokenUtil {
         } catch(Exception e) {}
         return false;
     }
-
 
 }

@@ -49,7 +49,7 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(method= RequestMethod.PATCH)
+    @RequestMapping(method= RequestMethod.PATCH, consumes = {"application/json"})
     public ResponseEntity<Void> updateUser(@RequestBody User user) {
         if(user.getId() == null) {
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -67,8 +67,6 @@ public class UserController {
         this.userService.deleteUser(user);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
-
-    //TODO - чи потрібні оброблювачі для запитів доступу до ролей користувача
 
     @PreFilter(value = "")
     @RequestMapping(value = "/{id}/roles", method = RequestMethod.GET)

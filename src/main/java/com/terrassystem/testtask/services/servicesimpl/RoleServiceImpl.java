@@ -20,7 +20,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional
     public void addRole(Role role) {
-        this.roleDao.save(role);
+        if(this.roleDao.findRoleByName(role.getName()) == null) {
+            this.roleDao.save(role);
+        }
     }
 
     @Transactional

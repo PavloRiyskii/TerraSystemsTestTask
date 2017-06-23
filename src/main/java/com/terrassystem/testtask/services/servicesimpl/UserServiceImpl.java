@@ -1,5 +1,6 @@
 package com.terrassystem.testtask.services.servicesimpl;
 
+import com.terrassystem.testtask.dao.RoleDao;
 import com.terrassystem.testtask.dao.UserDao;
 import com.terrassystem.testtask.entity.Role;
 import com.terrassystem.testtask.entity.User;
@@ -20,14 +21,21 @@ public class UserServiceImpl implements UserService {
    @Autowired
    private UserDao userDao;
 
+   @Autowired
+   private RoleDao roleDao;
+
    @Transactional
    public void addUser(User user) {
-        this.userDao.save(user);
+       if(this.userDao.getUserByUsernameAndPassword(user.getName(), user.getPassword()) == null) {
+           this.userDao.save(user);
+       }
     }
 
     @Transactional
     public void updateUser(User user) {
-        this.userDao.update(user);
+       if(user.getName() != null && user.getPassword() != null) {
+           this.userDao.update(user);
+       }
     }
 
     @Transactional
@@ -48,9 +56,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void addRole(User user, Role role) {
         Set<Role> roles = user.getRoles();
-        roles.add(role);
-        user.setRoles(roles);
-        this.userDao.update(user);
+
+        if(this.roleDao.findById(role.getId()) != null) {
+            roles.add(role);
+            user.setRoles(roles);
+            this.userDao.update(user);
+        }
     }
 
     @Transactional

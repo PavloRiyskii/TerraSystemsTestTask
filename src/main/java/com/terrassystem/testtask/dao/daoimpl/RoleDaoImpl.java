@@ -2,7 +2,9 @@ package com.terrassystem.testtask.dao.daoimpl;
 
 import com.terrassystem.testtask.dao.RoleDao;
 import com.terrassystem.testtask.entity.Role;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -35,5 +37,13 @@ public class RoleDaoImpl implements RoleDao {
     public void delete(Role role) {
         this.sessionFactory.getCurrentSession().delete(role);
         this.sessionFactory.getCurrentSession().flush();
+    }
+
+    @Override
+    public Role findRoleByName(String roleName) {
+        Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(Role.class);
+        criteria.add(Restrictions.eq("name", roleName));
+        List<Role> roles = criteria.list();
+        return roles.isEmpty() ? null : roles.get(0);
     }
 }
