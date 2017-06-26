@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,7 +31,7 @@ public class User implements Serializable{
     private boolean isActive;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -63,14 +65,14 @@ public class User implements Serializable{
         isActive = active;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         if(this.roles == null) {
-            return new HashSet<Role>();
+            return new LinkedList<Role>();
         }
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

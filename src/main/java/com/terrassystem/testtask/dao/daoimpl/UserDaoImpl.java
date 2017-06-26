@@ -48,4 +48,12 @@ public class UserDaoImpl implements UserDao {
         List<User> result = criteria.list();
         return result.isEmpty() ?  null : result.get(0);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        Criteria criteria  = this.sessionFactory.getCurrentSession().createCriteria(User.class);
+        criteria.add(Restrictions.eq("name", username));
+        List<User> users = criteria.list();
+        return users.isEmpty() ? null : users.get(0);
+    }
 }

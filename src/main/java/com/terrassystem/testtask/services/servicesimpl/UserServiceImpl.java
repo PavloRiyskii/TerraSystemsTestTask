@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void addRole(User user, Role role) {
-        Set<Role> roles = user.getRoles();
+        List<Role> roles = user.getRoles();
 
         if(this.roleDao.findById(role.getId()) != null) {
             roles.add(role);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void removeRole(User user, Role role){
-        Set<Role> roles = user.getRoles();
+        List<Role> roles = user.getRoles();
         roles.remove(role);
         user.setRoles(roles);
         this.userDao.update(user);

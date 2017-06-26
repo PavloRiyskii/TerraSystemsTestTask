@@ -7,4 +7,5 @@ import com.terrassystem.testtask.entity.User;
  */
 public interface UserDao extends GenericDao<User, Long> {
     User getUserByUsernameAndPassword(String username, String password);
+    User getUserByUsername(String username);
 }

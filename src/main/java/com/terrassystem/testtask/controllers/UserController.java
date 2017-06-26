@@ -8,6 +8,7 @@ import com.terrassystem.testtask.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> getUser(@PathVariable("id") long id) {
         User user = this.userService.getUserById(id);
@@ -33,6 +35,7 @@ public class UserController {
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> getAllUsers() {
         List<User> users = this.userService.getAllUsers();
@@ -40,6 +43,7 @@ public class UserController {
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<Void> addUser(@RequestBody User user) {
         if(user.getId() == null) {
@@ -49,6 +53,7 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method= RequestMethod.PATCH, consumes = {"application/json"})
     public ResponseEntity<Void> updateUser(@RequestBody User user) {
         if(user.getId() == null) {
@@ -59,6 +64,7 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteUser(@RequestBody User user) {
         if(user.getId() == null) {
@@ -68,30 +74,33 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PreFilter(value = "")
     @RequestMapping(value = "/{id}/roles", method = RequestMethod.GET)
     public ResponseEntity<String> getUserRoles(@PathVariable("id") Long id) {
-        Set<Role> roles = this.userService.getUserById(id).getRoles();
+        List<Role> roles = this.userService.getUserById(id).getRoles();
         String json = new Gson().toJson(roles);
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/{id}/roles", method = RequestMethod.POST)
     public ResponseEntity<Void> addUserRole(@RequestParam("roleId") Long roleId, @PathVariable("id") Long userId) {
         User user = this.userService.getUserById(userId);
         Role role = this.roleService.getRoleById(roleId);
-        Set<Role> userRoles = user.getRoles();
+        List<Role> userRoles = user.getRoles();
         userRoles.add(role);
         user.setRoles(userRoles);
         this.userService.updateUser(user);
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value =  "/{id}/roles", method = RequestMethod.DELETE)
     public ResponseEntity<Void> removeUserRole(@RequestParam("roleId") Long roleId, @PathVariable("id") Long userId) {
         User user = this.userService.getUserById(userId);
         Role role = this.roleService.getRoleById(roleId);
-        Set<Role> userRoles = user.getRoles();
+        List<Role> userRoles = user.getRoles();
         userRoles.remove(role);
         user.setRoles(userRoles);
         this.userService.updateUser(user);

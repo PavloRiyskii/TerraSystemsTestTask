@@ -5,10 +5,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
@@ -20,44 +25,38 @@ import java.io.IOException;
  * Created by Павло on 21.06.2017.
  */
 
-@Component
-@Order(1)
-@WebFilter({"/users", "/roles", "/users/*", "/roles/*"})
-public class AuthenticationFilter extends GenericFilterBean {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
-    final static Logger logger = Logger.getLogger(AuthenticationFilter.class);
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String authToken = null;
-        if((authToken = httpRequest.getHeader("Authorization")) != null) {}
-        else if ((authToken = httpRequest.getParameter("Authorization")) != null) {}
+        if((authToken = httpServletRequest.getHeader("Authorization")) != null) {}
+        else if ((authToken = httpServletRequest.getParameter("Authorization")) != null) {}
         else {
-            httpResponse.sendError(401, "Invalid token");
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 
         if(authToken.startsWith("Basic ") && TokenUtil.validateJWT(authToken.substring("Basic ".length(), authToken.length()))) {
             authToken = authToken.substring("Basic ".length(), authToken.length());
-            String username = TokenUtil.getUserNameFromToken(authToken);
-            String password = TokenUtil.getPasswordFromToken(authToken);
 
-            if (username != null) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+            // obtain username from tocken
+            String username = TokenUtil.getUserNameFromToken(authToken);
+
+            //obtain user details
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+            if(userDetails != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(httpServletRequest);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                httpResponse.sendError(401, "Invalid token");
-                return;
             }
-        } else {
-            httpResponse.sendError(401, "Invalid token");
-            return;
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     private String checkCoockies(Cookie[] cookies) {
