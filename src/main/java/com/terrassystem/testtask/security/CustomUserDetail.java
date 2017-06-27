@@ -4,6 +4,7 @@ import com.terrassystem.testtask.entity.Role;
 import com.terrassystem.testtask.entity.User;
 import io.jsonwebtoken.lang.Collections;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,11 +31,13 @@ public class CustomUserDetail extends User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ListIterator<Role> roles = this.getRoles().listIterator();
-        List<GrantedAuthority> authorities = new LinkedList<GrantedAuthority>();
+        String[] authorities = new String[this.getRoles().size()];
+        int i = 0;
         while(roles.hasNext()) {
-            authorities.add(new SimpleGrantedAuthority(roles.next().getName()));
+            authorities[i] = "ROLE_" + roles.next().getName();
+            i++;
         }
-        return authorities;
+        return AuthorityUtils.createAuthorityList(authorities);
     }
 
     @Override

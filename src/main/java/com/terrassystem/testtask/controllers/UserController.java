@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> getUser(@PathVariable("id") long id) {
         User user = this.userService.getUserById(id);
@@ -35,7 +35,7 @@ public class UserController {
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> getAllUsers() {
         List<User> users = this.userService.getAllUsers();
@@ -43,7 +43,6 @@ public class UserController {
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<Void> addUser(@RequestBody User user) {
         if(user.getId() == null) {
@@ -53,7 +52,7 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @RequestMapping(method= RequestMethod.PATCH, consumes = {"application/json"})
     public ResponseEntity<Void> updateUser(@RequestBody User user) {
         if(user.getId() == null) {
@@ -64,7 +63,7 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteUser(@RequestBody User user) {
         if(user.getId() == null) {
@@ -75,7 +74,6 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PreFilter(value = "")
     @RequestMapping(value = "/{id}/roles", method = RequestMethod.GET)
     public ResponseEntity<String> getUserRoles(@PathVariable("id") Long id) {
         List<Role> roles = this.userService.getUserById(id).getRoles();

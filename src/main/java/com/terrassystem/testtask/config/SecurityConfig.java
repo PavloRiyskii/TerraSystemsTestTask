@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,8 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
    protected void configure(HttpSecurity httpSecurity) throws Exception {
        httpSecurity
-               .csrf()
-                   .disable()
                .exceptionHandling().
                     authenticationEntryPoint(authenticationEntryPoint)
                     .and()
@@ -63,7 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                    .antMatchers("/auth").permitAll()
-                   .anyRequest().authenticated();
+                    .antMatchers(HttpMethod.PUT, "users").permitAll()
+                   .anyRequest().authenticated().and()
+               .csrf()
+                    .disable();
 
        httpSecurity
                .addFilterBefore(authenticationFilter(),UsernamePasswordAuthenticationFilter.class);

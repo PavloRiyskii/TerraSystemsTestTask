@@ -6,6 +6,7 @@ import com.terrassystem.testtask.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> getRoles() {
         List<Role> roles = this.roleService.getAllRoles();
@@ -29,7 +30,7 @@ public class RoleController {
         return new ResponseEntity<String>(jsonResponse, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> getRole(@PathVariable Long id) {
         Role role = this.roleService.getRoleById(id);

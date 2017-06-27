@@ -17,7 +17,7 @@ import javax.servlet.ServletRegistration;
 /**
  * Created by Павло on 21.06.2017.
  */
-public class ApplicationInit extends AbstractSecurityWebApplicationInitializer {
+public class SecurityonInit extends AbstractSecurityWebApplicationInitializer {
     /*public void onStartup(ServletContext servletContext) throws ServletException {
         registerDispatcherServlet(servletContext);
     }
