@@ -17,22 +17,5 @@ import javax.servlet.ServletRegistration;
 /**
  * Created by Павло on 21.06.2017.
  */
-public class SecurityonInit extends AbstractSecurityWebApplicationInitializer {
-    /*public void onStartup(ServletContext servletContext) throws ServletException {
-        registerDispatcherServlet(servletContext);
-    }
-
-    private void registerDispatcherServlet(ServletContext servletContext) {
-        WebApplicationContext applicationContext = this.getContext( Config.class, SecurityConfig.class, DBConfig.class);
-        DispatcherServlet dispatcherServlet= new DispatcherServlet(applicationContext);
-        ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", dispatcherServlet);
-        registration.setLoadOnStartup(1);
-        registration.addMapping("/");
-    }
-
-    public WebApplicationContext getContext(final Class<?>... annotatedClasses) {
-        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(annotatedClasses);
-        return context;
-    }*/
+public class SecurityInit extends AbstractSecurityWebApplicationInitializer {
 }
